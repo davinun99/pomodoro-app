@@ -5,12 +5,17 @@ import {Button, Container, Row, Col} from 'react-bootstrap';
 const Main = ({setHeaderPrefix}) => {
     const [timer, setTimer] = useState({min:25, sec: 0});
     const [isTimerRunning, setIsTimerRunning] = useState(false);
+    let audio = null;
+    if(typeof Audio != "undefined") {
+        audio = new Audio('../assets/notificationSound.wav');
+    }
     useEffect(() => {
         if(isTimerRunning){
             setHeaderPrefix(`${timer.min}:${timer.sec.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping:false})}`);
             setTimeout( ()=>{
                 const {min, sec} = timer;
                 if(min === sec && sec === 0){
+                    audio.play();
                     setIsTimerRunning(false);
                 }else if(sec === 0){
                     setTimer({
@@ -33,6 +38,10 @@ const Main = ({setHeaderPrefix}) => {
     }
     const handleStartTimer = () => {
         setIsTimerRunning(true);
+        if(audio){
+            console.log("xd");
+            audio.play();
+        }
     }
     return(
         <Container className="justify-content-center">
