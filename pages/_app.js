@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../src/styles/style.css'
 import { useState } from 'react';
 
 function MyApp({ Component, pageProps }) {
