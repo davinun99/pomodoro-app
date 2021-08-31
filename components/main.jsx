@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
 import {Button, Container, Row, Col} from 'react-bootstrap';
-
+import { prefix } from '../helpers/utils';
 const Main = ({setHeaderPrefix}) => {
     const [timer, setTimer] = useState({min:25, sec: 0});
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     let audio = null;
     if(typeof Audio != "undefined") {
-        audio = new Audio('../assets/notificationSound.wav');
+        audio = new Audio(`${prefix}/assets/notificationSound.wav`);
     }
     useEffect(() => {
         if(isTimerRunning){
@@ -39,7 +39,6 @@ const Main = ({setHeaderPrefix}) => {
     const handleStartTimer = () => {
         setIsTimerRunning(true);
         if(audio){
-            console.log("xd");
             audio.play();
         }
     }
