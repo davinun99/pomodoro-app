@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
-import {Button, Container, Row, Col, Form, FloatingLabel} from 'react-bootstrap';
+import {Button, Container, Row, Col, Form, FloatingLabel, Alert} from 'react-bootstrap';
 import { prefix } from '../helpers/utils';
 const Main = ({setHeaderPrefix}) => {
-    const [timer, setTimer] = useState({min:25, sec: 0});
+    const INITIAL_STATE = {min:25, sec: 0};
+    const [timer, setTimer] = useState(INITIAL_STATE);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const [totalPomodoros, setTotalPomodoros] = useState(0);
+    const [autoStart, setAutoStart] = useState(true);
     let audio = null;
     if(typeof Audio != "undefined") {
         audio = new Audio(`${prefix}/assets/notificationSound.wav`);
@@ -17,6 +20,11 @@ const Main = ({setHeaderPrefix}) => {
                 if(min === sec && sec === 0){
                     audio.play();
                     setIsTimerRunning(false);
+                    setTotalPomodoros(totalPomodoros+1);
+                    setTimer( INITIAL_STATE );
+                    if(autoStart){
+                        setIsTimerRunning(true);
+                    }
                 }else if(sec === 0){
                     setTimer({
                         ...timer,
@@ -41,6 +49,13 @@ const Main = ({setHeaderPrefix}) => {
         if(audio){
             audio.play();
         }
+    }
+    const handleResetTimer = () => {
+        setIsTimerRunning(false);
+        setTimeout(() => {
+            setTimer( INITIAL_STATE );
+            setIsTimerRunning(true);
+        }, 1000);
     }
     return(
         <Container className="mainContainer d-flex justify-content-center">
@@ -69,13 +84,22 @@ const Main = ({setHeaderPrefix}) => {
                             <span className="h4 p-3 border border-info rounded">{`${timer.min}:${timer.sec.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping:false})}`}</span>
                         </div>
                     </Col>
-                    <Col sm="12" className=" mt-3">
+                    <Col sm="12" className="my-3">
                         <div className="text-center">
-                            <Button variant="success" onClick={handleStartTimer}>Start timer</Button>{` `}
-                            <Button variant="danger" onClick={handleStopTimer}>Stop timer</Button>
+                            <Button variant="success" onClick={handleStartTimer}>Start</Button>{` `}
+                            <Button variant="danger" onClick={handleStopTimer}>Stop</Button>{` `}
+                            <Button variant="secondary" onClick={handleResetTimer}>Reset</Button>
                         </div>
                     </Col>
-                    
+                    <Col sm="12" className="d-flex justify-content-center mt-3">
+                        <Col sm="10" md="6" lg="4" className="text-center ">
+                            {totalPomodoros ? 
+                                <Alert variant="success">You have done {totalPomodoros} {totalPomodoros > 1 ? 'pomodoros' :'pomodoro' } today!</Alert>
+                                :
+                                <Alert variant="danger">No pomodoros today! ;(</Alert>
+                            }
+                        </Col>
+                    </Col>
                 </Row>
             </div>
         </Container>
