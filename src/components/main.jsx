@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import {Button, Container, Row, Col, Form, FloatingLabel, Alert} from 'react-bootstrap';
 import { useTimer } from 'react-timer-hook';
+import {AiFillSetting} from 'react-icons/ai';
+import Link from 'next/link';
 import { prefix } from '../helpers/utils';
 
 const Main = () => {
@@ -43,6 +45,7 @@ const Main = () => {
         }else{
             resume();
         }
+        audio.play();
     }
     const handleResetTimer = () => {
         restart( get25Min() );
@@ -52,7 +55,12 @@ const Main = () => {
             <div className="h-100 d-flex align-items-center">
                 <Row>
                     <Col sm="12" className=" mt-5">
-                        <h1 className="text-center">Pomodoro app</h1>
+                        <h1 className="text-center"><span className="m-3">Pomodoro app</span>
+                            <Link href="/">
+                                <a className="settings-icon-parent"><AiFillSetting size={30}/></a>
+                            </Link>
+                        </h1>
+                        
                     </Col>
                     <Col sm="12" className="my-3 d-flex justify-content-center">
                         <Col sm="10" md="6" lg="4">
