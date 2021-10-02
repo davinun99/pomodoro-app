@@ -1,5 +1,7 @@
-import Main from "../src/components/main";
+import Configuration from "../src/components/configuration";
 
 export default function Home({setHeaderPrefix}) {
-  return ( <Main setHeaderPrefix={setHeaderPrefix}/> );
+	return (
+		<Configuration/>
+	);
 }
