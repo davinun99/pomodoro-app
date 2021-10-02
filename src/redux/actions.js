@@ -1,8 +1,10 @@
+import * as types from './types';
+
 export const setPomodoroDuration = (duration) => ({
-    type: SET_POMODORO_DURATION,
+    type: types.SET_POMODORO_DURATION,
     payload:duration,
 });
 export const setPomodoroConfiguration = (duration, autoStart) => ({
-    type: SET_POMODORO_DURATION,
+    type: types.SET_POMODORO_CONFIGURATION,
     payload: {duration, autoStart},
 });

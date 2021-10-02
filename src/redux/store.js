@@ -1,9 +1,16 @@
-import { combineReducers, createStore } from "redux";
+import {combineReducers, createStore, compose, applyMiddleware } from "redux";
 import pomodoroReducer from "./reducer";
 
 const rootReducer = combineReducers({
-    pomodoroReducer 
+    pomodoro: pomodoroReducer 
 });
+const composeEnhancers = typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(rootReducer);
+const INITIAL_STATE = {pomodoro: {
+    duration: 25,
+    autoStart: true,
+}};
+const store = createStore(rootReducer, INITIAL_STATE, composeEnhancers(
+    applyMiddleware()
+));
 export default store ;

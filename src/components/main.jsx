@@ -4,16 +4,17 @@ import { useTimer } from 'react-timer-hook';
 import {AiFillSetting} from 'react-icons/ai';
 import Link from 'next/link';
 import { prefix } from '../helpers/utils';
+import { connect } from 'react-redux';
 
-const Main = () => {
+const Main = ({duration, autoStart}) => {
     
     const [timerHasStarted, setTimerHasStarted] = useState(false);
     const [totalPomodoros, setTotalPomodoros] = useState(0);
     let audio = typeof Audio != "undefined" ? new Audio(`${prefix}/assets/notificationSound.wav`) : null;
 
-    const get25Min = () => {
+    const getDuration = (minutes) => {
         const expiryTimestamp = new Date();
-        expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 12300);
+        expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + minutes * 60); // Use to be 12300 to equal 25 AND 25 * 492 = 12300
         return expiryTimestamp;
     }
     const onExpire = () => {
@@ -31,7 +32,7 @@ const Main = () => {
         pause,
         resume,
         restart,
-    } = useTimer({ expiryTimestamp: get25Min(), onExpire }); 
+    } = useTimer({ expiryTimestamp: getDuration(duration), onExpire, autoStart }); 
 
     const handleStopTimer = () => {
         if(timerHasStarted){
@@ -48,8 +49,9 @@ const Main = () => {
         audio.play();
     }
     const handleResetTimer = () => {
-        restart( get25Min() );
+        restart( getDuration(duration) );
     }
+    const secondsFormatted = seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping:false});
     return(
         <Container className="mainContainer d-flex justify-content-center">
             <div className="h-100 d-flex align-items-center">
@@ -79,7 +81,7 @@ const Main = () => {
                     </Col>
                     <Col className="my-3">
                         <div className="text-center">
-                            <span className="h4 p-3 border border-info rounded">{`${minutes}:${seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping:false})}`}</span>
+                            <span className="h4 p-3 border border-info rounded">{`${minutes}:${secondsFormatted}`}</span>
                         </div>
                     </Col>
                     <Col sm="12" className="my-3">
@@ -103,4 +105,8 @@ const Main = () => {
         </Container>
     );
 }
-export default Main;
+const mapStateToProps = (state) =>{
+    const {duration, autoStart} = state.pomodoro;
+    return {duration, autoStart};
+}
+export default connect(mapStateToProps, {})(Main);
